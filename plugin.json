@@ -1,0 +1,15 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "hermes-schedule-agent",
+  "version": "0.1.0",
+  "description": "Schedule Agent calendar and contact tools for Hermes.",
+  "author": {
+    "name": "Martin Bukowski"
+  },
+  "license": "AGPL-3.0-or-later",
+  "keywords": [
+    "scheduling",
+    "calendar",
+    "mcp"
+  ]
+}

@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=75,<81"]
+build-backend = "setuptools.build_meta"
+[project]
+name = "hermes-schedule-agent-integration"
+version = "0.1.0"
+requires-python = ">=3.11,<3.14"
+dependencies = ["schedule-cli>=0.1,<0.2"]
+[project.entry-points."schedule_cli.profiles"]
+hermes = "hermes_schedule_agent.profiles:profile_adapter"
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["hermes_schedule_agent*"]
