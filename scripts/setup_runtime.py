@@ -36,18 +36,45 @@ def main():
     source_path = args.editable_source or args.source
     source = source_path.resolve() if source_path else None
     if source:
-        revision = subprocess.check_output(
-            ["git", "-C", str(source), "rev-parse", "HEAD"], text=True
-        ).strip()
-        dirty = subprocess.check_output(
-            ["git", "-C", str(source), "status", "--porcelain"], text=True
-        ).strip()
-        print(f"Local Schedule Agent: {source} HEAD={revision} dirty={bool(dirty)}")
+        if (source / ".git").exists():
+            revision = subprocess.check_output(
+                ["git", "-C", str(source), "rev-parse", "HEAD"], text=True
+            ).strip()
+            dirty = subprocess.check_output(
+                ["git", "-C", str(source), "status", "--porcelain"], text=True
+            ).strip()
+            print(f"Local Schedule Agent: {source} HEAD={revision} dirty={bool(dirty)}")
+        else:
+            print(f"Local Schedule Agent source snapshot: {source} (no Git metadata)")
     venv.EnvBuilder(with_pip=True).create(destination)
-    python = destination / (
-        "Scripts/python.exe" if sys.platform == "win32" else "bin/python"
-    )
+    python = destination / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
     install = [str(python), "-m", "pip", "install"]
+    if source and (source / "uv.lock").is_file():
+        uv = shutil.which("uv")
+        if uv is None:
+            raise SystemExit("uv is required to install a locked local source snapshot")
+        constraints = destination / "schedule-runtime-constraints.txt"
+        subprocess.run(
+            [
+                uv,
+                "export",
+                "--project",
+                str(source),
+                "--frozen",
+                "--package",
+                "schedule-mcp",
+                "--no-dev",
+                "--no-emit-workspace",
+                "--no-hashes",
+                "--format",
+                "requirements-txt",
+                "--output-file",
+                str(constraints),
+            ],
+            check=True,
+            stdout=subprocess.DEVNULL,
+        )
+        install += ["--constraint", str(constraints)]
     if args.editable_source:
         subprocess.run(
             install
@@ -98,9 +125,7 @@ def main():
                 check=True,
             )
     else:
-        subprocess.run(
-            install + ["-r", str(root / "runtime-requirements.txt")], check=True
-        )
+        subprocess.run(install + ["-r", str(root / "runtime-requirements.txt")], check=True)
     subprocess.run(
         install
         + ["--no-deps"]

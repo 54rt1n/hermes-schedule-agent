@@ -1,6 +1,6 @@
 ---
 name: schedule-tasks
-description: Execute task creation, editing, overdue review, completion and reopening with Schedule Agent, including Org completion-repeaters.
+description: Manage Schedule Agent tasks, completion and repeat rules.
 ---
 # Tasks
 
@@ -28,17 +28,17 @@ this clears its completion marker. Reopen before another state transition.
 
 1. Retrieve the task by ID; inspect state, dates, repeat rule and previous completion.
    DONE and CANCELLED tasks cannot be completed again directly.
-2. Distinguish Org repeaters from imported RRULE tasks. Completing an RRULE-only task
+2. Distinguish completion-driven `repeat` rules from `rrule` recurrence. Completing an RRULE-only task
    marks the entire record DONE and removes all future occurrences from the agenda.
    Do not use it to satisfy a request to complete just one occurrence; explain that
    per-occurrence RRULE task completion is unsupported.
 3. Use the dedicated completion operation, not a DONE patch. Use the supplied actual
    completion time when known; otherwise the service uses now in the task timezone.
-4. Check the returned task. Ordinary tasks become DONE; Org repeaters advance their dates
+4. Check the returned task. Ordinary tasks become DONE; tasks with `repeat` rules advance their dates
    and return to TODO with a completion marker. Verify the next dates and report the
    completed action separately from the next obligation.
 
-Org `+` advances each anchor once, possibly leaving it past-dated; `++` advances each
+In the `repeat` field, `+` advances each anchor once, possibly leaving it past-dated; `++` advances each
 anchor beyond completion; `.+` calculates each next anchor from completion. If both
 scheduled and deadline dates exist, check both returned dates rather than assuming
 spacing is preserved. Reopening does not reverse this advancement; correct mistaken

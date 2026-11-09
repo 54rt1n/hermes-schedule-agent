@@ -1,4 +1,4 @@
-# Schedule Agent packages share one immutable GitHub revision.
-schedule-core @ git+https://github.com/54rt1n/schedule-agent.git@a7f71ccdff3c9d32d605d2d106ade18efac714d2#subdirectory=packages/schedule-core
-schedule-cli @ git+https://github.com/54rt1n/schedule-agent.git@a7f71ccdff3c9d32d605d2d106ade18efac714d2#subdirectory=packages/schedule-cli
-schedule-mcp @ git+https://github.com/54rt1n/schedule-agent.git@a7f71ccdff3c9d32d605d2d106ade18efac714d2#subdirectory=packages/schedule-mcp
+# Schedule Agent packages share one Git revision; update all three pins together.
+schedule-core @ git+https://github.com/54rt1n/schedule-agent.git@7c5355933382dc49b3ca8dbc9e2075a8fcc5740b#subdirectory=packages/schedule-core
+schedule-cli @ git+https://github.com/54rt1n/schedule-agent.git@7c5355933382dc49b3ca8dbc9e2075a8fcc5740b#subdirectory=packages/schedule-cli
+schedule-mcp @ git+https://github.com/54rt1n/schedule-agent.git@7c5355933382dc49b3ca8dbc9e2075a8fcc5740b#subdirectory=packages/schedule-mcp
